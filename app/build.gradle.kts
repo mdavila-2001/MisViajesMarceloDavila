@@ -45,7 +45,9 @@ dependencies {
     implementation(libs.converter.gson)
     implementation(libs.retrofit)
     runtimeOnly(libs.androidx.lifecycle.viewmodel.compose)
+    runtimeOnly(libs.androidx.lifecycle.runtime)
     runtimeOnly(libs.androidx.navigation.compose)
+    implementation(libs.logging.interceptor)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
