@@ -24,7 +24,7 @@ interface ApiService{
     ): Response<List<Trip>>
 
     @POST("trips")
-    suspend fun createViaje(
+    suspend fun createTrip(
         @Body trip: TripDTO
     ): Response<Trip>
 
@@ -43,11 +43,11 @@ interface ApiService{
     suspend fun getPlacesByTrip(
         @Path(
             "id"
-        ) id: String
+        ) id: Int
     ): Response<List<Place>>
 
     @POST("places")
-    suspend fun addPlaceToTrip(
+    suspend fun createPlace(
         @Body place: PlaceDTO
     ): Response<Place>
 
