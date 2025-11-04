@@ -2,8 +2,12 @@ package com.mdavila_2001.tripadvisorclonemarcelodavila.ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.List
+import androidx.compose.material.icons.filled.LocationOn
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -13,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.tooling.preview.Preview
 
 @Composable
 fun BottomNavigationBar(
@@ -25,7 +30,7 @@ fun BottomNavigationBar(
             .background(
                 brush = Brush.linearGradient(
                     colors = listOf(
-                        Color(0xFF16FA2C),
+                        Color(0xFF03FF1E),
                         Color(0xFF28E4FA)
                     ),
                     start = Offset(-500f, 0f),
@@ -39,8 +44,8 @@ fun BottomNavigationBar(
             onClick = { onTabSelected(0) },
             icon = {
                 Icon(
-                    Icons.Default.Search,
-                    contentDescription = "Buscar",
+                    Icons.Default.LocationOn,
+                    contentDescription = "Todos los Viajes",
                     tint = if (selectedTab == 0) Color.White else Color.Black
                 )
             },
@@ -56,17 +61,27 @@ fun BottomNavigationBar(
             onClick = { onTabSelected(1) },
             icon = {
                 Icon(
-                    Icons.Default.List,
-                    contentDescription = "Recetas",
+                    Icons.Default.Person,
+                    contentDescription = "Mis Viajes",
                     tint = if (selectedTab == 1) Color.White else Color.Black
                 )
             },
             label = {
                 Text(
-                    "Recetas",
+                    "Mis Viajes",
                     color = Color.Black
                 )
             }
         )
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun BottomNavigationBarPreview() {
+    BottomNavigationBar(
+        selectedTab = 0,
+        onTabSelected = {},
+        modifier = Modifier
+    )
 }

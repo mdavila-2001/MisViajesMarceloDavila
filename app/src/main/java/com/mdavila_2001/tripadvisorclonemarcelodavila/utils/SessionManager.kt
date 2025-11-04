@@ -16,12 +16,12 @@ class SessionManager(context: Context) {
         editor.apply()
     }
 
-    fun getUsername(): String? {
+    fun getUserName(): String? {
         return prefs.getString(USERNAME, null)
     }
 
     fun isLoggedIn(): Boolean {
-        return getUsername() != null
+        return getUserName() != null
     }
 
     fun logout() {
