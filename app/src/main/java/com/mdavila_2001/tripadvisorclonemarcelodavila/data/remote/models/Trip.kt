@@ -5,7 +5,7 @@ import kotlinx.serialization.Serializer
 
 data class Trip (
     @SerializedName("id")
-    val id: String,
+    val id: Int,
 
     @SerializedName("name")
     val name: String,

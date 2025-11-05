@@ -1,32 +1,35 @@
 package com.mdavila_2001.tripadvisorclonemarcelodavila.ui.screens
 
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.mdavila_2001.tripadvisorclonemarcelodavila.ui.NavRoutes
 import com.mdavila_2001.tripadvisorclonemarcelodavila.ui.components.AppBar
 import com.mdavila_2001.tripadvisorclonemarcelodavila.ui.components.BottomNavigationBar
 import com.mdavila_2001.tripadvisorclonemarcelodavila.ui.components.TripList
 import com.mdavila_2001.tripadvisorclonemarcelodavila.ui.theme.TripAdvisorCloneMarceloDavilaTheme
-import com.mdavila_2001.tripadvisorclonemarcelodavila.ui.viewmodels.LoginViewModel
 import com.mdavila_2001.tripadvisorclonemarcelodavila.ui.viewmodels.Tab
 import com.mdavila_2001.tripadvisorclonemarcelodavila.ui.viewmodels.TripsViewModel
 
@@ -40,17 +43,31 @@ fun TripsScreen(
 
     val navigateToLogin by viewModel.navigateToLogin.collectAsState()
 
+    LaunchedEffect(navigateToLogin) {
+        if (navigateToLogin){
+            navController.navigate("login") {
+                popUpTo(navController.graph.startDestinationId) {
+                    inclusive = true
+                }
+            }
+        }
+    }
+
     LaunchedEffect(key1 = Unit) {
         viewModel.loadData()
     }
 
+    val showLogoutDialog = remember { mutableStateOf(false) }
+
     Scaffold(
         topBar = {
             AppBar(
-                title = "Viajes",
+                title = if (uiState.selectedTab == Tab.TRIPS) "Viajes" else "Mis Viajes",
+                backEnabled = false,
                 onLogoutClick = {
-                    viewModel.onLogoutClicked()
+                    showLogoutDialog.value = true
                 },
+                onBackClick = {},
                 modifier = Modifier,
             )
         },
@@ -68,7 +85,7 @@ fun TripsScreen(
             BottomNavigationBar(
                 selectedTab = uiState.selectedTab.ordinal,
                 onTabSelected = { index ->
-                    viewModel.selectTab(Tab.values()[index])
+                    viewModel.selectTab(Tab.entries[index])
                 },
                 modifier = Modifier
             )
@@ -91,8 +108,35 @@ fun TripsScreen(
             } else {
                 TripList(
                     trips = uiState.currentList,
-                    onTripClick = {
-                        //navController.navigate("trip/${it.id}")
+                    onTripClick = { trip ->
+                        navController.navigate(
+                            NavRoutes.TripDetails.createRoute(
+                                tripId = trip.id,
+                                tripName = trip.name,
+                                tripOwner = trip.username
+                            )
+                        )
+                    }
+                )
+            }
+
+            if (showLogoutDialog.value) {
+                AlertDialog(
+                    onDismissRequest = { showLogoutDialog.value = false },
+                    title = { Text(text = "Confirmar cierre de sesión") },
+                    text = { Text(text = "¿Estás seguro que quieres cerrar sesión?") },
+                    confirmButton = {
+                        TextButton(onClick = {
+                            showLogoutDialog.value = false
+                            viewModel.onLogoutClicked()
+                        }) {
+                            Text("Sí")
+                        }
+                    },
+                    dismissButton = {
+                        TextButton(onClick = { showLogoutDialog.value = false }) {
+                            Text("No")
+                        }
                     }
                 )
             }

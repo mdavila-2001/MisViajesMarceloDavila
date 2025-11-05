@@ -47,18 +47,18 @@ fun TripList(
 fun TripListPreview() {
     val sampleTrips = listOf(
         Trip(
-            id = "1",
+            id = 1,
             name = "Aventura en los Andes",
             country = "Perú",
-            username = "marcelodavila",
+            username = "marcelo.davila",
             createdAt = "2023-01-01",
             updatedAt = "2023-01-02"
         ),
         Trip(
-            id = "2",
+            id = 2,
             name = "Explorando la Patagonia",
             country = "Argentina",
-            username = "juanperez",
+            username = "juan.perez",
             createdAt = "2023-02-01",
             updatedAt = "2023-02-02"
         )

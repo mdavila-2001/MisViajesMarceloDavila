@@ -45,7 +45,7 @@ fun TripItem(
 @Composable
 fun TripItemPreview() {
     val sampleTrip = Trip(
-        id = "1",
+        id = 1,
         name = "Aventura en los Andes",
         country = "Perú",
         username = "marcelodavila",
