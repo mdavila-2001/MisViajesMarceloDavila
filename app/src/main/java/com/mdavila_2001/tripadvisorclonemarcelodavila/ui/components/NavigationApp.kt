@@ -8,6 +8,7 @@ import androidx.navigation.compose.rememberNavController
 import com.mdavila_2001.tripadvisorclonemarcelodavila.ui.NavRoutes
 import com.mdavila_2001.tripadvisorclonemarcelodavila.ui.screens.LoginScreen
 import com.mdavila_2001.tripadvisorclonemarcelodavila.ui.screens.SplashScreen
+import com.mdavila_2001.tripadvisorclonemarcelodavila.ui.screens.TripsScreen
 import com.mdavila_2001.tripadvisorclonemarcelodavila.ui.viewmodels.SplashViewModel
 
 @Composable
@@ -30,7 +31,9 @@ fun NavigationApp() {
             )
         }
         composable(NavRoutes.Trips.route) {
-            //TripsScreen(navController = navController)
+            TripsScreen(
+                navController = navController
+            )
         }
     }
 }
