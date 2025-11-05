@@ -38,6 +38,8 @@ fun TripsScreen(
 ) {
     val uiState by viewModel.uiState.collectAsState()
 
+    val navigateToLogin by viewModel.navigateToLogin.collectAsState()
+
     LaunchedEffect(key1 = Unit) {
         viewModel.loadData()
     }
@@ -46,6 +48,9 @@ fun TripsScreen(
         topBar = {
             AppBar(
                 title = "Viajes",
+                onLogoutClick = {
+                    viewModel.onLogoutClicked()
+                },
                 modifier = Modifier,
             )
         },

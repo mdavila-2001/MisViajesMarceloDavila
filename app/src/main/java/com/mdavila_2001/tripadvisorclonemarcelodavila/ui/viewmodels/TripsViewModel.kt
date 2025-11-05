@@ -33,6 +33,9 @@ class TripsViewModel(application: Application): AndroidViewModel(application) {
     private val _uiState = MutableStateFlow(TripsUiState())
     val uiState: StateFlow<TripsUiState> = _uiState.asStateFlow()
 
+    private val _navigateToLogin = MutableStateFlow(false)
+    val navigateToLogin: StateFlow<Boolean> = _navigateToLogin
+
     private var allTripsCache: List<Trip> = emptyList()
     private var myTripsCache: List<Trip> = emptyList()
 
@@ -89,5 +92,13 @@ class TripsViewModel(application: Application): AndroidViewModel(application) {
                 }
             )
         }
+    }
+
+    fun onLogoutClicked() {
+        sessionManager.logout()
+        _navigateToLogin.value = true
+    }
+    fun onLoginNavigated() {
+        _navigateToLogin.value = false
     }
 }

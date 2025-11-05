@@ -4,7 +4,11 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -23,6 +27,7 @@ import com.mdavila_2001.tripadvisorclonemarcelodavila.ui.theme.TripAdvisorCloneM
 @Composable
 fun AppBar(
     title: String,
+    onLogoutClick: () -> Unit,
     modifier: Modifier
 ) {
     TopAppBar(
@@ -35,6 +40,17 @@ fun AppBar(
                     title,
                     style = MaterialTheme.typography.headlineLarge,
                     color = Color.Black
+                )
+            }
+        },
+        actions = {
+            IconButton(
+                onClick = onLogoutClick
+            ) {
+                Icon(
+                    Icons.Default.ExitToApp,
+                    contentDescription = "Salir",
+                    tint = Color.Black
                 )
             }
         },
@@ -61,7 +77,8 @@ fun AppBar(
 fun AppBarPreview() {
     TripAdvisorCloneMarceloDavilaTheme() {
         AppBar(
-            title = "TripAdvisor Clone",
+            title = "Mis Viajes",
+            onLogoutClick = {},
             modifier = Modifier
         )
     }
