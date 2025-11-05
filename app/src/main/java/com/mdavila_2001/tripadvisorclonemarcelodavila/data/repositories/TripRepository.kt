@@ -9,7 +9,7 @@ import kotlinx.coroutines.withContext
 import retrofit2.Response
 
 class TripRepository (
-    private val apiService: ApiService = RetroFitInstance.apiService,
+    private val apiService: ApiService = RetroFitInstance.api,
 ) {
     suspend fun getAllTrips(): Response<List<Trip>> {
         return withContext(Dispatchers.IO) {

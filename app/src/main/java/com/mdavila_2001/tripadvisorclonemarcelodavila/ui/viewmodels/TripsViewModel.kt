@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.mdavila_2001.tripadvisorclonemarcelodavila.data.remote.models.Trip
+import com.mdavila_2001.tripadvisorclonemarcelodavila.data.remote.network.RetroFitInstance
 import com.mdavila_2001.tripadvisorclonemarcelodavila.data.repositories.TripRepository
 import com.mdavila_2001.tripadvisorclonemarcelodavila.utils.SessionManager
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -26,7 +27,7 @@ data class TripsUiState(
 
 class TripsViewModel(application: Application): AndroidViewModel(application) {
 
-    private val repository = TripRepository()
+    private val repository = TripRepository(RetroFitInstance.api)
     private val sessionManager = SessionManager(application)
 
     private val _uiState = MutableStateFlow(TripsUiState())

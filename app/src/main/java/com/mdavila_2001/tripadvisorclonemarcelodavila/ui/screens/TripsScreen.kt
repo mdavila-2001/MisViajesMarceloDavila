@@ -23,6 +23,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.mdavila_2001.tripadvisorclonemarcelodavila.ui.components.AppBar
+import com.mdavila_2001.tripadvisorclonemarcelodavila.ui.components.BottomNavigationBar
 import com.mdavila_2001.tripadvisorclonemarcelodavila.ui.components.TripList
 import com.mdavila_2001.tripadvisorclonemarcelodavila.ui.theme.TripAdvisorCloneMarceloDavilaTheme
 import com.mdavila_2001.tripadvisorclonemarcelodavila.ui.viewmodels.LoginViewModel
@@ -57,6 +58,15 @@ fun TripsScreen(
                     "Crear Viaje"
                 )
             }
+        },
+        bottomBar = {
+            BottomNavigationBar(
+                selectedTab = uiState.selectedTab.ordinal,
+                onTabSelected = { index ->
+                    viewModel.selectTab(Tab.values()[index])
+                },
+                modifier = Modifier
+            )
         }
     ) { paddingValues ->
         Box(

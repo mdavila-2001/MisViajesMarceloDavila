@@ -13,10 +13,10 @@ import retrofit2.http.PUT
 import retrofit2.http.Path
 
 interface ApiService{
-    @GET("/trips")
+    @GET("trips")
     suspend fun getAllTrips(): Response<List<Trip>>
 
-    @GET("/trips/{username}")
+    @GET("trips/{username}")
     suspend fun getTripsByUser(
         @Path(
             "username"
