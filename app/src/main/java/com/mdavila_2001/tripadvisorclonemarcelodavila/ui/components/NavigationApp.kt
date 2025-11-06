@@ -10,6 +10,7 @@ import androidx.navigation.navArgument
 import com.mdavila_2001.tripadvisorclonemarcelodavila.ui.NavRoutes
 import com.mdavila_2001.tripadvisorclonemarcelodavila.ui.screens.LoginScreen
 import com.mdavila_2001.tripadvisorclonemarcelodavila.ui.screens.SplashScreen
+import com.mdavila_2001.tripadvisorclonemarcelodavila.ui.screens.TripDetailScreen
 import com.mdavila_2001.tripadvisorclonemarcelodavila.ui.screens.TripsScreen
 import com.mdavila_2001.tripadvisorclonemarcelodavila.ui.viewmodels.SplashViewModel
 
@@ -49,12 +50,12 @@ fun NavigationApp() {
             requireNotNull(tripName) { "El Nombre del viaje es nulo" }
             requireNotNull(tripOwner) { "El Dueño del viaje es nulo" }
 
-//            TripPlaces(
-//                navController = navController
-//                tripId = tripId,
-//                tripName = tripName.replace("_", " "),
-//                tripOwner = tripOwner,
-//            )
+            TripDetailScreen(
+                navController = navController,
+                tripId = tripId,
+                tripName = tripName.replace("_", " "),
+                tripOwner = tripOwner
+            )
         }
     }
 }
