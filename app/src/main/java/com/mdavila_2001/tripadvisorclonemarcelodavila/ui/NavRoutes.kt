@@ -10,7 +10,8 @@ sealed class NavRoutes(val route: String){
 
     object Trips: NavRoutes("trips")
 
-    object TripDetails: NavRoutes("trip_details/{tripId}{tripName}/{tripOwner}"){
+    object TripDetail: NavRoutes("trip_detail/{tripId}/{tripName}/{tripOwner}"){
+
         val arguments = listOf(
             navArgument("tripId") { type = NavType.IntType },
             navArgument("tripName") { type = NavType.StringType },

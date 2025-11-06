@@ -110,7 +110,7 @@ fun TripsScreen(
                     trips = uiState.currentList,
                     onTripClick = { trip ->
                         navController.navigate(
-                            NavRoutes.TripDetails.createRoute(
+                            NavRoutes.TripDetail.createRoute(
                                 tripId = trip.id,
                                 tripName = trip.name,
                                 tripOwner = trip.username

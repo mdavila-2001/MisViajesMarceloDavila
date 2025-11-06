@@ -1,6 +1,7 @@
 package com.mdavila_2001.tripadvisorclonemarcelodavila.ui.viewmodels
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.mdavila_2001.tripadvisorclonemarcelodavila.data.remote.models.Place
@@ -50,6 +51,7 @@ class TripDetailViewModel(
                 val response = repository.getPlacesByTrip(tripId)
                 if (response.isSuccessful) {
                     places = response.body() ?: emptyList()
+                    Log.d("DEBUG_IMAGEN", "Datos de imagen recibidos: ${places.firstOrNull()?.imageUrl}")
                 } else {
                     errorMsg = "Error al cargar lugares: ${response.code()}"
                 }

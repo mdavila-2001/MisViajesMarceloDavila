@@ -39,8 +39,8 @@ fun NavigationApp() {
             )
         }
         composable(
-            NavRoutes.TripDetails.route,
-            arguments = NavRoutes.TripDetails.arguments
+            NavRoutes.TripDetail.route,
+            arguments = NavRoutes.TripDetail.arguments
         ) { backStackEntry ->
             val tripId = backStackEntry.arguments?.getInt("tripId")
             val tripName = backStackEntry.arguments?.getString("tripName")
