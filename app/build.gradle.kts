@@ -50,6 +50,7 @@ dependencies {
     runtimeOnly(libs.androidx.lifecycle.runtime)
     runtimeOnly(libs.androidx.navigation.compose)
     implementation(libs.logging.interceptor)
+    implementation(libs.coil.compose)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)

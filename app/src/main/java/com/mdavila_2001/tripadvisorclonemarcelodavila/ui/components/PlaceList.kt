@@ -12,30 +12,31 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.mdavila_2001.tripadvisorclonemarcelodavila.data.remote.models.Trip
+import com.mdavila_2001.tripadvisorclonemarcelodavila.data.remote.models.Place
 
 @Composable
-fun TripList(
-    trips: List<Trip>,
-    onTripClick: (Trip) -> Unit
+fun PlaceList(
+    places: List<Place>,
+    modifier: Modifier = Modifier, onPlaceClick: (Place) -> Unit
 ) {
-    if(trips.isEmpty()) {
+    if(places.isEmpty()){
         Box(
             modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.Center
         ) {
-            Text("No hay viajes disponibles por el momento.")
+            Text("Aún no hay lugares disponibles.")
         }
     } else {
         LazyColumn(
+            modifier = modifier,
             contentPadding = PaddingValues(16.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            items(trips) { trip ->
-                TripItem(
-                    trip = trip,
+            items(places) { place ->
+                PlaceItem(
+                    place = place,
                     onClick = {
-                        onTripClick(trip)
+                        onPlaceClick(place)
                     }
                 )
             }
@@ -45,27 +46,26 @@ fun TripList(
 
 @Preview(showBackground = true)
 @Composable
-fun TripListPreview() {
-    val sampleTrips = listOf(
-        Trip(
+fun PlaceListPreview() {
+    val samplePlaces = listOf(
+        Place(
             id = 1,
-            name = "Aventura en los Andes",
-            country = "Perú",
-            username = "marcelo.davila",
+            name = "Machu Picchu",
+            description = "Ancient Incan city in Peru",
+            city = "Cusco",
+            tripId = 1,
             createdAt = "2023-01-01",
             updatedAt = "2023-01-02"
         ),
-        Trip(
+        Place(
             id = 2,
-            name = "Explorando la Patagonia",
-            country = "Argentina",
-            username = "juan.perez",
+            name = "Eiffel Tower",
+            description = "Iconic tower in Paris",
+            city = "Paris",
+            tripId = 2,
             createdAt = "2023-02-01",
             updatedAt = "2023-02-02"
         )
     )
-    TripList(
-        trips = sampleTrips,
-        onTripClick = {}
-    )
+    PlaceList(places = samplePlaces, onPlaceClick = {})
 }
