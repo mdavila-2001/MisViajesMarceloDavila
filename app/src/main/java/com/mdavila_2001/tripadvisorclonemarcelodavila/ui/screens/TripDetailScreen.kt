@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.CircularProgressIndicator
@@ -24,7 +23,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.mdavila_2001.tripadvisorclonemarcelodavila.ui.components.AppBar
+import com.mdavila_2001.tripadvisorclonemarcelodavila.ui.components.global.AppBar
 import com.mdavila_2001.tripadvisorclonemarcelodavila.ui.components.PlaceList
 import com.mdavila_2001.tripadvisorclonemarcelodavila.ui.viewmodels.TripDetailViewModel
 

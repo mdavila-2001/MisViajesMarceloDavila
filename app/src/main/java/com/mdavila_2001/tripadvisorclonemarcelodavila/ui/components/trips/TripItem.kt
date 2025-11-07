@@ -1,4 +1,4 @@
-package com.mdavila_2001.tripadvisorclonemarcelodavila.ui.components
+package com.mdavila_2001.tripadvisorclonemarcelodavila.ui.components.trips
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column

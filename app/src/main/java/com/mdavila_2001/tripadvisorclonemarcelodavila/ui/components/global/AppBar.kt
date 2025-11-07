@@ -1,4 +1,4 @@
-package com.mdavila_2001.tripadvisorclonemarcelodavila.ui.components
+package com.mdavila_2001.tripadvisorclonemarcelodavila.ui.components.global
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -28,6 +28,7 @@ import com.mdavila_2001.tripadvisorclonemarcelodavila.ui.theme.TripAdvisorCloneM
 @Composable
 fun AppBar(
     title: String,
+    logOutEnabled: Boolean = true,
     backEnabled: Boolean = false,
     onLogoutClick: () -> Unit,
     onBackClick: (() -> Unit)? = null,
@@ -60,14 +61,16 @@ fun AppBar(
             }
         },
         actions = {
-            IconButton(
-                onClick = onLogoutClick
-            ) {
-                Icon(
-                    Icons.Default.ExitToApp,
-                    contentDescription = "Salir",
-                    tint = Color.Black
-                )
+            if (logOutEnabled) {
+                IconButton(
+                    onClick = onLogoutClick
+                ) {
+                    Icon(
+                        Icons.Default.ExitToApp,
+                        contentDescription = "Salir",
+                        tint = Color.Black
+                    )
+                }
             }
         },
         modifier = modifier

@@ -26,9 +26,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.mdavila_2001.tripadvisorclonemarcelodavila.ui.NavRoutes
-import com.mdavila_2001.tripadvisorclonemarcelodavila.ui.components.AppBar
-import com.mdavila_2001.tripadvisorclonemarcelodavila.ui.components.BottomNavigationBar
-import com.mdavila_2001.tripadvisorclonemarcelodavila.ui.components.TripList
+import com.mdavila_2001.tripadvisorclonemarcelodavila.ui.components.global.AppBar
+import com.mdavila_2001.tripadvisorclonemarcelodavila.ui.components.global.BottomNavigationBar
+import com.mdavila_2001.tripadvisorclonemarcelodavila.ui.components.trips.TripList
 import com.mdavila_2001.tripadvisorclonemarcelodavila.ui.theme.TripAdvisorCloneMarceloDavilaTheme
 import com.mdavila_2001.tripadvisorclonemarcelodavila.ui.viewmodels.Tab
 import com.mdavila_2001.tripadvisorclonemarcelodavila.ui.viewmodels.TripsViewModel
@@ -73,7 +73,9 @@ fun TripsScreen(
         },
         floatingActionButton = {
             FloatingActionButton(
-                onClick = {}
+                onClick = {
+                    navController.navigate(NavRoutes.TripForm.route)
+                }
             ) {
                 Icon(
                     Icons.Default.Add,
