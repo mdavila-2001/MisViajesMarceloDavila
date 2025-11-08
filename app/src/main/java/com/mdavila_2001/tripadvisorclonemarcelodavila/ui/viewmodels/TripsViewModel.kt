@@ -11,6 +11,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 
 enum class Tab {
@@ -35,6 +37,10 @@ class TripsViewModel(application: Application): AndroidViewModel(application) {
 
     private val _navigateToLogin = MutableStateFlow(false)
     val navigateToLogin: StateFlow<Boolean> = _navigateToLogin
+
+    // Evento que indica que un viaje fue eliminado correctamente
+    private val _deleteSuccess = MutableSharedFlow<Boolean>(replay = 0)
+    val deleteSuccess = _deleteSuccess.asSharedFlow()
 
     private var allTripsCache: List<Trip> = emptyList()
     private var myTripsCache: List<Trip> = emptyList()
@@ -88,6 +94,8 @@ class TripsViewModel(application: Application): AndroidViewModel(application) {
             try {
                 val response = repository.deleteTrip(trip.id)
                 if (response.isSuccessful) {
+                    // Emitir evento de éxito para que la UI muestre un Toast
+                    _deleteSuccess.emit(true)
                     loadData()
                 } else {
                     _uiState.update { it.copy(errorMessage = "Error al eliminar: ${response.message()}") }

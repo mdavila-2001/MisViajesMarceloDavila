@@ -32,6 +32,7 @@ import com.mdavila_2001.tripadvisorclonemarcelodavila.ui.components.trips.TripLi
 import com.mdavila_2001.tripadvisorclonemarcelodavila.ui.theme.TripAdvisorCloneMarceloDavilaTheme
 import com.mdavila_2001.tripadvisorclonemarcelodavila.ui.viewmodels.Tab
 import com.mdavila_2001.tripadvisorclonemarcelodavila.ui.viewmodels.TripsViewModel
+import android.widget.Toast
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -55,6 +56,16 @@ fun TripsScreen(
 
     LaunchedEffect(key1 = Unit) {
         viewModel.loadData()
+    }
+
+    val context = LocalContext.current
+
+    LaunchedEffect(key1 = viewModel.deleteSuccess) {
+        viewModel.deleteSuccess.collect { success ->
+            if (success) {
+                Toast.makeText(context, "Viaje eliminado exitosamente", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
     val showLogoutDialog = remember { mutableStateOf(false) }
