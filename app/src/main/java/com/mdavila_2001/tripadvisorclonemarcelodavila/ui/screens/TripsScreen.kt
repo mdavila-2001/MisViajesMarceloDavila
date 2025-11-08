@@ -74,7 +74,7 @@ fun TripsScreen(
         floatingActionButton = {
             FloatingActionButton(
                 onClick = {
-                    navController.navigate(NavRoutes.TripForm.route)
+                    navController.navigate(NavRoutes.TripForm.createRoute())
                 }
             ) {
                 Icon(
@@ -118,6 +118,20 @@ fun TripsScreen(
                                 tripOwner = trip.username
                             )
                         )
+                    },
+                    isMyTrip = (uiState.selectedTab == Tab.MY_TRIPS),
+                    onEditClick = { trip ->
+                        navController.navigate(
+                            NavRoutes.TripForm.createEditRoute(
+                                tripId = trip.id,
+                                name = trip.name,
+                                country = trip.country
+                            )
+                        )
+                    },
+
+                    onDeleteClick = { trip ->
+                        viewModel.onDeleteTrip(trip)
                     }
                 )
             }

@@ -17,7 +17,10 @@ import com.mdavila_2001.tripadvisorclonemarcelodavila.data.remote.models.Trip
 @Composable
 fun TripList(
     trips: List<Trip>,
-    onTripClick: (Trip) -> Unit
+    onTripClick: (Trip) -> Unit,
+    isMyTrip: Boolean,
+    onEditClick: (Trip) -> Unit,
+    onDeleteClick: (Trip) -> Unit
 ) {
     if(trips.isEmpty()) {
         Box(
@@ -36,7 +39,10 @@ fun TripList(
                     trip = trip,
                     onClick = {
                         onTripClick(trip)
-                    }
+                    },
+                    isMyTrip = isMyTrip,
+                    onEditClick = { onEditClick(trip) },
+                    onDeleteClick = { onDeleteClick(trip) }
                 )
             }
         }
@@ -66,6 +72,9 @@ fun TripListPreview() {
     )
     TripList(
         trips = sampleTrips,
-        onTripClick = {}
+        onTripClick = {},
+        isMyTrip = false,
+        onEditClick = {},
+        onDeleteClick = {}
     )
 }

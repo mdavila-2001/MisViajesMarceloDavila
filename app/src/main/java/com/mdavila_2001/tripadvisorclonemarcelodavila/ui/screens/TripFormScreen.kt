@@ -65,6 +65,7 @@ fun TripFormScreen(
 
     val uiState by viewModel.uiState.collectAsState()
     val navigateBack by viewModel.navigateBack.collectAsState()
+    val toastMessage by viewModel.toastMessage.collectAsState()
 
     val context = LocalContext.current
 
@@ -78,6 +79,12 @@ fun TripFormScreen(
     LaunchedEffect(uiState.errorMessage) {
         if (uiState.errorMessage != null) {
             Toast.makeText(context, uiState.errorMessage, Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    LaunchedEffect(toastMessage) {
+        if (toastMessage != null) {
+            Toast.makeText(context, toastMessage, Toast.LENGTH_SHORT).show()
         }
     }
 

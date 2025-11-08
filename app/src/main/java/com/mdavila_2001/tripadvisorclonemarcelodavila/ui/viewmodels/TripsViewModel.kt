@@ -81,6 +81,23 @@ class TripsViewModel(application: Application): AndroidViewModel(application) {
         }
     }
 
+    fun onDeleteTrip(trip: Trip) {
+        viewModelScope.launch {
+            _uiState.update { it.copy(isLoading = true) }
+
+            try {
+                val response = repository.deleteTrip(trip.id)
+                if (response.isSuccessful) {
+                    loadData()
+                } else {
+                    _uiState.update { it.copy(errorMessage = "Error al eliminar: ${response.message()}") }
+                }
+            } catch(e: Exception) {
+                _uiState.update { it.copy(errorMessage = "Error de conexión: ${e.message}") }
+            }
+        }
+    }
+
     fun selectTab(tab: Tab) {
         _uiState.update {
             it.copy(

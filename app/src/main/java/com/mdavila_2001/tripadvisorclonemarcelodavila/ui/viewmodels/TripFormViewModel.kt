@@ -1,6 +1,7 @@
 package com.mdavila_2001.tripadvisorclonemarcelodavila.ui.viewmodels
 
 import android.app.Application
+import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.mdavila_2001.tripadvisorclonemarcelodavila.data.remote.models.dto.TripDTO
@@ -35,6 +36,9 @@ class TripFormViewModel(
 
     private val _navigateBack = MutableStateFlow(false)
     val navigateBack: StateFlow<Boolean> = _navigateBack.asStateFlow()
+
+    private val _toastMessage = MutableStateFlow<String?>(null)
+    val toastMessage: StateFlow<String?> = _toastMessage.asStateFlow()
 
     init {
         if (initialName != null && initialCountry != null) {
@@ -89,14 +93,19 @@ class TripFormViewModel(
 
         viewModelScope.launch {
             try {
-                val response = if (tripId == null) {
-                    repository.createTrip(tripDto)
-                } else {
+                val isEditing = (tripId != null)
+
+                val response = if (isEditing) {
                     repository.updateTrip(tripId, tripDto)
+                } else {
+                    repository.createTrip(tripDto)
                 }
 
                 if (response.isSuccessful) {
+                    val successMessage = if (isEditing) "Viaje actualizado exitosamente" else "Viaje creado exitosamente"
+                    _toastMessage.value = successMessage
                     _navigateBack.value = true
+
                 } else {
                     _uiState.update {
                         it.copy(
