@@ -10,7 +10,7 @@ import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.toRequestBody
 
-class ImagesRepository(
+class ImageRepository(
     private val api: ImgBbApiService = ImgBbRetroFitInstance.api
 ) {
     private val apiKey = "96e77af03c73f4698389152db9bb5e37"

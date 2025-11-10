@@ -34,11 +34,14 @@ class TripDetailViewModel(
     private val _uiState = MutableStateFlow(TripDetailUiState())
     val uiState: StateFlow<TripDetailUiState> = _uiState.asStateFlow()
 
-    // Evento que indica que un lugar fue eliminado correctamente
     private val _deleteSuccess = MutableSharedFlow<Boolean>(replay = 0)
     val deleteSuccess = _deleteSuccess.asSharedFlow()
 
     init {
+        loadPlaces()
+    }
+
+    fun reloadPlaces() {
         loadPlaces()
     }
 
@@ -85,7 +88,6 @@ class TripDetailViewModel(
                 val response = repository.deletePlace(place.id)
 
                 if (response.isSuccessful) {
-                    // Emitir evento de éxito para que la UI muestre un Toast
                     _deleteSuccess.emit(true)
                     loadPlaces()
                 } else {

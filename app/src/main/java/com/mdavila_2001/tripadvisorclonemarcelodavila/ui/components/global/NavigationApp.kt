@@ -9,6 +9,7 @@ import androidx.navigation.compose.rememberNavController
 import com.mdavila_2001.tripadvisorclonemarcelodavila.ui.NavRoutes
 import com.mdavila_2001.tripadvisorclonemarcelodavila.ui.screens.LoginScreen
 import com.mdavila_2001.tripadvisorclonemarcelodavila.ui.screens.PlaceDetailScreen
+import com.mdavila_2001.tripadvisorclonemarcelodavila.ui.screens.PlaceFormScreen
 import com.mdavila_2001.tripadvisorclonemarcelodavila.ui.screens.SplashScreen
 import com.mdavila_2001.tripadvisorclonemarcelodavila.ui.screens.TripDetailScreen
 import com.mdavila_2001.tripadvisorclonemarcelodavila.ui.screens.TripFormScreen
@@ -105,12 +106,11 @@ fun NavigationApp() {
             requireNotNull(tripId) { "El ID del viaje es nulo" }
             requireNotNull(placeId) { "El ID del lugar es nulo" }
 
-            // PlaceFormScreen(
-            //     navController = navController,
-            //     tripId = tripId,
-            //     placeId = if (placeId == -1) null else placeId // Pasa null si es -1
-            // )
-            Text(text = "Aquí irá el formulario para el viaje $tripId y lugar $placeId")
+             PlaceFormScreen(
+                 navController = navController,
+                 tripId = tripId,
+                 placeId = if (placeId == -1) null else placeId
+             )
         }
     }
 }

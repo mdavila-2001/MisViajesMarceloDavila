@@ -64,6 +64,20 @@ fun TripDetailScreen(
 
     val uiState by viewModel.uiState.collectAsState()
 
+    val savedStateHandle = navController.currentBackStackEntry?.savedStateHandle
+    LaunchedEffect(savedStateHandle) {
+        if (savedStateHandle != null) {
+            val flow = savedStateHandle.getStateFlow("places_updated", false)
+            // collect en un coroutine
+            flow.collect { updated ->
+                if (updated) {
+                    viewModel.reloadPlaces()
+                    savedStateHandle.remove<Boolean>("places_updated")
+                }
+            }
+        }
+    }
+
     val context = LocalContext.current
 
     val placeToDelete = remember { mutableStateOf<Place?>(null) }
@@ -92,7 +106,7 @@ fun TripDetailScreen(
             if (uiState.isMyTrip) {
                 FloatingActionButton(
                     onClick = {
-                        navController.navigate(NavRoutes.PlaceForm.route)
+                        navController.navigate(NavRoutes.PlaceForm.createRoute(tripId))
                     }
                 ) {
                     Icon(
@@ -131,7 +145,10 @@ fun TripDetailScreen(
                     isMyTrip = uiState.isMyTrip,
                     onEditClick = {
                         navController.navigate(
-                            NavRoutes.PlaceForm.createRoute(tripId)
+                            NavRoutes.PlaceForm.createEditRoute(
+                                tripId = tripId,
+                                placeId = it.id
+                            )
                         )
                     },
                     onDeleteClick = { place ->
@@ -140,7 +157,6 @@ fun TripDetailScreen(
                 )
             }
 
-            // Diálogo de confirmación para eliminar lugar
             val placeForDialog = placeToDelete.value
             if (placeForDialog != null) {
                 AlertDialog(

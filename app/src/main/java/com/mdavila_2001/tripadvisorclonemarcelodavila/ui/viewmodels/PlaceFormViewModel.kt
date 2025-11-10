@@ -1,11 +1,13 @@
 package com.mdavila_2001.tripadvisorclonemarcelodavila.ui.viewmodels
 
 import android.app.Application
+import android.net.Uri
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.mdavila_2001.tripadvisorclonemarcelodavila.data.remote.models.dto.PlaceDTO
 import com.mdavila_2001.tripadvisorclonemarcelodavila.data.remote.network.RetroFitInstance
 import com.mdavila_2001.tripadvisorclonemarcelodavila.data.repositories.PlaceRepository
+import com.mdavila_2001.tripadvisorclonemarcelodavila.data.repositories.imgbb.ImageRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -21,6 +23,8 @@ data class PlaceFormUiState(
     val price: String = "",
     val directions: String = "",
 
+    val selectedImageUri: Uri? = null,
+    val isUploadingImage: Boolean = false,
     val isLoading: Boolean = false,
     val errorMessage: String? = null
 )
@@ -28,9 +32,10 @@ data class PlaceFormUiState(
 class PlaceFormViewModel(
     application: Application,
     private val tripId: Int,
-    private val placeId: Int
+    private val placeId: Int?
 ) : AndroidViewModel(application) {
     private val repository = PlaceRepository(RetroFitInstance.api)
+    private val imageRepository = ImageRepository()
 
     private val _uiState = MutableStateFlow(PlaceFormUiState())
     val uiState: StateFlow<PlaceFormUiState> = _uiState.asStateFlow()
@@ -53,7 +58,7 @@ class PlaceFormViewModel(
                 it.copy(isLoading = true)
             }
             try {
-                val response = repository.getPlacesByTrip(placeId)
+                val response = repository.getPlacesByTrip(tripId)
                 if (response.isSuccessful) {
                     val place = response.body()?.find { it.id == placeId }
                     if (place != null) {
@@ -62,7 +67,7 @@ class PlaceFormViewModel(
                                 name = place.name,
                                 city = place.city,
                                 description = place.description ?: "",
-                                imageUrl = place.imageUrl?.replace("\\/", "/") ?: "", // Limpiamos la URL
+                                imageUrl = place.imageUrl?.replace("\\/", "/") ?: "",
                                 timeToSpend = place.timeToSpend ?: "",
                                 price = place.price ?: "",
                                 directions = place.directions ?: ""
@@ -75,9 +80,38 @@ class PlaceFormViewModel(
                     _uiState.update { it.copy(errorMessage = "Error al cargar datos") }
                 }
             } catch (e: Exception) {
-                _uiState.update { it.copy(errorMessage = "Error de conexión") }
+                _uiState.update { it.copy(errorMessage = "Error de conexión: ${e.message}") }
             } finally {
                 _uiState.update { it.copy(isLoading = false) }
+            }
+        }
+    }
+
+    fun onImageSelected(uri: Uri) {
+        _uiState.update { it.copy(selectedImageUri = uri) }
+        uploadImage(uri)
+    }
+
+    private fun uploadImage(uri: Uri) {
+        viewModelScope.launch {
+            _uiState.update { it.copy(isUploadingImage = true, errorMessage = null) }
+
+            val imageUrl = imageRepository.uploadImage(getApplication(), uri)
+
+            if (imageUrl != null) {
+                _uiState.update {
+                    it.copy(
+                        isUploadingImage = false,
+                        imageUrl = imageUrl
+                    )
+                }
+            } else {
+                _uiState.update {
+                    it.copy(
+                        isUploadingImage = false,
+                        errorMessage = "Error al subir la imagen"
+                    )
+                }
             }
         }
     }
@@ -95,6 +129,10 @@ class PlaceFormViewModel(
 
         if (state.name.isBlank() || state.city.isBlank()) {
             _uiState.update { it.copy(errorMessage = "Nombre y Ciudad son obligatorios") }
+            return
+        }
+        if (state.isUploadingImage) {
+            _uiState.update { it.copy(errorMessage = "Espera a que termine de subir la imagen") }
             return
         }
 
@@ -136,4 +174,5 @@ class PlaceFormViewModel(
 
     fun onToastShown() { _toastMessage.value = null }
     fun onNavigationDone() { _navigateBack.value = false }
+    fun onErrorMessageShown() { _uiState.update { it.copy(errorMessage = null) } }
 }
