@@ -57,6 +57,7 @@ fun PlaceItem(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Row(
+                modifier = Modifier.weight(2f),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 AsyncImage(
@@ -79,22 +80,25 @@ fun PlaceItem(
                     Text(text = place.city, style = MaterialTheme.typography.bodyMedium)
                 }
             }
-
-        }
-        if (isMyTrip) {
-            Row {
-                IconButton(onClick = onEditClick) {
-                    Icon(
-                        Icons.Default.Edit,
-                        contentDescription = "Editar Lugar"
-                    )
-                }
-                IconButton(onClick = onDeleteClick) {
-                    Icon(
-                        Icons.Default.Delete,
-                        contentDescription = "Eliminar Lugar",
-                        tint = Color.Red
-                    )
+            if (isMyTrip) {
+                Row(
+                    modifier = Modifier.weight(1f),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.End
+                ) {
+                    IconButton(onClick = onEditClick) {
+                        Icon(
+                            Icons.Default.Edit,
+                            contentDescription = "Editar Lugar"
+                        )
+                    }
+                    IconButton(onClick = onDeleteClick) {
+                        Icon(
+                            Icons.Default.Delete,
+                            contentDescription = "Eliminar Lugar",
+                            tint = Color.Red
+                        )
+                    }
                 }
             }
         }
@@ -107,7 +111,7 @@ fun PlaceItemPreview() {
     TripAdvisorCloneMarceloDavilaTheme() {
         val samplePlace = Place(
             id = 1,
-            name = "Machu Picchu",
+            name = "Machu Picchu una ciudad con una descripción muy larga para probar el diseño",
             city = "Cusco",
             tripId = 1,
             description = "Ancient Incan city located in the Andes Mountains.",
