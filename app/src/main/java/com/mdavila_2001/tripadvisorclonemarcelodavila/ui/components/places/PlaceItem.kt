@@ -79,21 +79,22 @@ fun PlaceItem(
                     Text(text = place.city, style = MaterialTheme.typography.bodyMedium)
                 }
             }
-            if (isMyTrip) {
-                Row {
-                    IconButton(onClick = onEditClick) {
-                        Icon(
-                            Icons.Default.Edit,
-                            contentDescription = "Editar Lugar"
-                        )
-                    }
-                    IconButton(onClick = onDeleteClick) {
-                        Icon(
-                            Icons.Default.Delete,
-                            contentDescription = "Eliminar Lugar",
-                            tint = Color.Red
-                        )
-                    }
+
+        }
+        if (isMyTrip) {
+            Row {
+                IconButton(onClick = onEditClick) {
+                    Icon(
+                        Icons.Default.Edit,
+                        contentDescription = "Editar Lugar"
+                    )
+                }
+                IconButton(onClick = onDeleteClick) {
+                    Icon(
+                        Icons.Default.Delete,
+                        contentDescription = "Eliminar Lugar",
+                        tint = Color.Red
+                    )
                 }
             }
         }

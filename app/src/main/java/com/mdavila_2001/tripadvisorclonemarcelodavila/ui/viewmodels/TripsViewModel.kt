@@ -94,7 +94,6 @@ class TripsViewModel(application: Application): AndroidViewModel(application) {
             try {
                 val response = repository.deleteTrip(trip.id)
                 if (response.isSuccessful) {
-                    // Emitir evento de éxito para que la UI muestre un Toast
                     _deleteSuccess.emit(true)
                     loadData()
                 } else {

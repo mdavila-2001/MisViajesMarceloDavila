@@ -7,12 +7,13 @@ import androidx.lifecycle.viewModelScope
 import com.mdavila_2001.tripadvisorclonemarcelodavila.data.remote.models.Place
 import com.mdavila_2001.tripadvisorclonemarcelodavila.data.remote.network.RetroFitInstance
 import com.mdavila_2001.tripadvisorclonemarcelodavila.data.repositories.PlaceRepository
-import com.mdavila_2001.tripadvisorclonemarcelodavila.data.repositories.TripRepository
 import com.mdavila_2001.tripadvisorclonemarcelodavila.utils.SessionManager
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 
 data class TripDetailUiState (
@@ -32,6 +33,10 @@ class TripDetailViewModel(
 
     private val _uiState = MutableStateFlow(TripDetailUiState())
     val uiState: StateFlow<TripDetailUiState> = _uiState.asStateFlow()
+
+    // Evento que indica que un lugar fue eliminado correctamente
+    private val _deleteSuccess = MutableSharedFlow<Boolean>(replay = 0)
+    val deleteSuccess = _deleteSuccess.asSharedFlow()
 
     init {
         loadPlaces()
@@ -67,6 +72,29 @@ class TripDetailViewModel(
                     errorMessage = errorMsg
                 )
             }
+        }
+    }
+
+    fun onDeletePlace(place: Place) {
+        viewModelScope.launch {
+            _uiState.update {
+                it.copy(isLoading = true)
+            }
+
+            try {
+                val response = repository.deletePlace(place.id)
+
+                if (response.isSuccessful) {
+                    // Emitir evento de éxito para que la UI muestre un Toast
+                    _deleteSuccess.emit(true)
+                    loadPlaces()
+                } else {
+                    _uiState.update { it.copy(errorMessage = "Error al eliminar: ${response.message()}") }
+                }
+            } catch (e: Exception) {
+                _uiState.update { it.copy(errorMessage = "Error de conexión: ${e.message}") }
+            }
+
         }
     }
 }

@@ -62,4 +62,23 @@ sealed class NavRoutes(val route: String){
 
         fun createRoute(tripId: Int, placeId: Int) = "place_detail/$tripId/$placeId"
     }
+
+    object PlaceForm: NavRoutes(
+        "place_form/{tripId}" +
+                "?placeId={placeId}"
+    ) {
+        val arguments = listOf(
+            navArgument("tripId") { type = NavType.IntType },
+            navArgument("placeId") {
+                type = NavType.IntType
+                defaultValue = -1
+            }
+        )
+
+        fun createRoute(tripId: Int) = "place_form/$tripId"
+
+        fun createEditRoute(tripId: Int, placeId: Int): String {
+            return "place_form/$tripId?placeId=$placeId"
+        }
+    }
 }

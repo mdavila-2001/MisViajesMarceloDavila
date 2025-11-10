@@ -1,21 +1,26 @@
 package com.mdavila_2001.tripadvisorclonemarcelodavila.ui.screens
 
 import android.app.Application
+import android.widget.Toast
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.LocationOn
-import androidx.compose.material3.BottomAppBar
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -23,6 +28,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.mdavila_2001.tripadvisorclonemarcelodavila.data.remote.models.Place
 import com.mdavila_2001.tripadvisorclonemarcelodavila.ui.NavRoutes
 import com.mdavila_2001.tripadvisorclonemarcelodavila.ui.components.global.AppBar
 import com.mdavila_2001.tripadvisorclonemarcelodavila.ui.components.places.PlaceList
@@ -58,6 +64,18 @@ fun TripDetailScreen(
 
     val uiState by viewModel.uiState.collectAsState()
 
+    val context = LocalContext.current
+
+    val placeToDelete = remember { mutableStateOf<Place?>(null) }
+
+    LaunchedEffect(key1 = viewModel.deleteSuccess) {
+        viewModel.deleteSuccess.collect { success ->
+            if (success) {
+                Toast.makeText(context, "Lugar eliminado exitosamente", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
     Scaffold(
         topBar = {
             AppBar(
@@ -70,20 +88,17 @@ fun TripDetailScreen(
                 modifier = Modifier
             )
         },
-        bottomBar = {
+        floatingActionButton = {
             if (uiState.isMyTrip) {
-                BottomAppBar(
-                    actions = {},
-                    floatingActionButton = {
-                        FloatingActionButton(
-                            onClick = {}
-                        ) {
-                            Icon(
-                                Icons.Default.LocationOn,
-                                "Agregar Lugar")
-                        }
+                FloatingActionButton(
+                    onClick = {
+                        navController.navigate(NavRoutes.PlaceForm.route)
                     }
-                )
+                ) {
+                    Icon(
+                        Icons.Default.LocationOn,
+                        "Agregar Lugar")
+                }
             }
         }
     ) { paddingValues ->
@@ -114,8 +129,38 @@ fun TripDetailScreen(
                         )
                     },
                     isMyTrip = uiState.isMyTrip,
-                    onEditClick = {},
-                    onDeleteClick = {}
+                    onEditClick = {
+                        navController.navigate(
+                            NavRoutes.PlaceForm.createRoute(tripId)
+                        )
+                    },
+                    onDeleteClick = { place ->
+                        placeToDelete.value = place
+                    }
+                )
+            }
+
+            // Diálogo de confirmación para eliminar lugar
+            val placeForDialog = placeToDelete.value
+            if (placeForDialog != null) {
+                AlertDialog(
+                    onDismissRequest = { placeToDelete.value = null },
+                    title = { Text(text = "Confirmar eliminación") },
+                    text = { Text(text = "¿Estás seguro que deseas eliminar '${placeForDialog.name}'?") },
+                    confirmButton = {
+                        TextButton(onClick = {
+                            // Llamar al ViewModel para eliminar y cerrar el diálogo
+                            viewModel.onDeletePlace(placeForDialog)
+                            placeToDelete.value = null
+                        }) {
+                            Text("Sí")
+                        }
+                    },
+                    dismissButton = {
+                        TextButton(onClick = { placeToDelete.value = null }) {
+                            Text("No")
+                        }
+                    }
                 )
             }
         }

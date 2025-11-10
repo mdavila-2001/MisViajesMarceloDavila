@@ -94,5 +94,23 @@ fun NavigationApp() {
                 placeId = placeId
             )
         }
+
+        composable(
+            route = NavRoutes.PlaceForm.route,
+            arguments = NavRoutes.PlaceForm.arguments
+        ) { backStackEntry ->
+            val tripId = backStackEntry.arguments?.getInt("tripId")
+            val placeId = backStackEntry.arguments?.getInt("placeId")
+
+            requireNotNull(tripId) { "El ID del viaje es nulo" }
+            requireNotNull(placeId) { "El ID del lugar es nulo" }
+
+            // PlaceFormScreen(
+            //     navController = navController,
+            //     tripId = tripId,
+            //     placeId = if (placeId == -1) null else placeId // Pasa null si es -1
+            // )
+            Text(text = "Aquí irá el formulario para el viaje $tripId y lugar $placeId")
+        }
     }
 }
