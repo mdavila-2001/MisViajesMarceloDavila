@@ -1,6 +1,7 @@
 package com.mdavila_2001.tripadvisorclonemarcelodavila.ui.screens
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -10,7 +11,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -42,6 +45,8 @@ fun LoginScreen(
 
     val navigate by viewModel.navigateToMain.collectAsState()
 
+    val isDarkTheme = isSystemInDarkTheme()
+
     LaunchedEffect(navigate) {
         if (navigate) {
             navController.navigate("trips") {
@@ -51,11 +56,15 @@ fun LoginScreen(
         }
     }
 
-    LoginView(
-        userName = userName,
-        onUserNameChanged = { userName = it },
-        onLoginClick = { viewModel.onLoginClicked(userName) }
-    )
+    Scaffold() { paddingValues ->
+        LoginView(
+            userName = userName,
+            onUserNameChanged = { userName = it },
+            onLoginClick = { viewModel.onLoginClicked(userName) },
+            modifier = modifier.padding(paddingValues),
+            isDarkTheme = isDarkTheme
+        )
+    }
 }
 
 @Composable
@@ -63,6 +72,8 @@ private fun LoginView(
     userName: String,
     onUserNameChanged: (String) -> Unit,
     onLoginClick: () -> Unit,
+    modifier: Modifier,
+    isDarkTheme: Boolean = false
 ) {
     Column(
         modifier = Modifier
@@ -72,11 +83,10 @@ private fun LoginView(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Image(
-            painter = painterResource(id = R.drawable.splash),
+            painter = painterResource(id = R.drawable.logo),
             contentDescription = "Logo de la App",
-            modifier = Modifier.size(180.dp)
+            modifier = Modifier.size(360.dp)
         )
-        Spacer(modifier = Modifier.size(32.dp))
 
         Text(
             text = "Ingrese su usuario:",
@@ -111,7 +121,9 @@ fun LoginScreenPreview() {
         LoginView(
             userName = "",
             onUserNameChanged = {},
-            onLoginClick = {}
+            onLoginClick = {},
+            modifier = Modifier,
+            isDarkTheme = false
         )
     }
 }
