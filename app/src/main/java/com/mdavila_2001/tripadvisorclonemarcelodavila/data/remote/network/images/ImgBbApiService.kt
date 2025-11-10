@@ -10,7 +10,7 @@ import retrofit2.http.Query
 
 interface ImgBbApiService {
     @Multipart
-    @POST("/1/upload")
+    @POST("1/upload")
     suspend fun uploadImage(
         @Query("key") apiKey: String,
         @Part image: MultipartBody.Part

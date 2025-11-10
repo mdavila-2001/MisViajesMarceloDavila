@@ -1,11 +1,13 @@
 package com.mdavila_2001.tripadvisorclonemarcelodavila.ui.viewmodels
 
 import android.app.Application
+import android.net.Uri
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.mdavila_2001.tripadvisorclonemarcelodavila.data.remote.models.dto.PlaceDTO
 import com.mdavila_2001.tripadvisorclonemarcelodavila.data.remote.network.RetroFitInstance
 import com.mdavila_2001.tripadvisorclonemarcelodavila.data.repositories.PlaceRepository
+import com.mdavila_2001.tripadvisorclonemarcelodavila.data.repositories.imgbb.ImageRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -21,6 +23,8 @@ data class PlaceFormUiState(
     val price: String = "",
     val directions: String = "",
 
+    val selectedImageUri: Uri? = null,
+    val isUploadingImage: Boolean = false,
     val isLoading: Boolean = false,
     val errorMessage: String? = null
 )
@@ -31,6 +35,7 @@ class PlaceFormViewModel(
     private val placeId: Int
 ) : AndroidViewModel(application) {
     private val repository = PlaceRepository(RetroFitInstance.api)
+    private val imageRepository = ImageRepository()
 
     private val _uiState = MutableStateFlow(PlaceFormUiState())
     val uiState: StateFlow<PlaceFormUiState> = _uiState.asStateFlow()
@@ -62,7 +67,7 @@ class PlaceFormViewModel(
                                 name = place.name,
                                 city = place.city,
                                 description = place.description ?: "",
-                                imageUrl = place.imageUrl?.replace("\\/", "/") ?: "", // Limpiamos la URL
+                                imageUrl = place.imageUrl?.replace("\\/", "/") ?: "",
                                 timeToSpend = place.timeToSpend ?: "",
                                 price = place.price ?: "",
                                 directions = place.directions ?: ""
@@ -82,6 +87,38 @@ class PlaceFormViewModel(
         }
     }
 
+    fun onImageSelected(uri: Uri) {
+        // Guardamos el Uri para la previsualización
+        _uiState.update { it.copy(selectedImageUri = uri) }
+        // Empezamos la subida a ImgBB en segundo plano
+        uploadImage(uri)
+    }
+
+    private fun uploadImage(uri: Uri) {
+        viewModelScope.launch {
+            _uiState.update { it.copy(isUploadingImage = true, errorMessage = null) }
+
+            val imageUrl = imageRepository.uploadImage(getApplication(), uri)
+
+            if (imageUrl != null) {
+                // ¡Éxito! Guardamos la URL de ImgBB en nuestro estado
+                _uiState.update {
+                    it.copy(
+                        isUploadingImage = false,
+                        imageUrl = imageUrl // <-- ¡URL lista!
+                    )
+                }
+            } else {
+                _uiState.update {
+                    it.copy(
+                        isUploadingImage = false,
+                        errorMessage = "Error al subir la imagen"
+                    )
+                }
+            }
+        }
+    }
+
     fun onNameChange(value: String) = _uiState.update { it.copy(name = value) }
     fun onCityChange(value: String) = _uiState.update { it.copy(city = value) }
     fun onDescriptionChange(value: String) = _uiState.update { it.copy(description = value) }
@@ -95,6 +132,10 @@ class PlaceFormViewModel(
 
         if (state.name.isBlank() || state.city.isBlank()) {
             _uiState.update { it.copy(errorMessage = "Nombre y Ciudad son obligatorios") }
+            return
+        }
+        if (state.isUploadingImage) {
+            _uiState.update { it.copy(errorMessage = "Espera a que termine de subir la imagen") }
             return
         }
 
@@ -136,4 +177,5 @@ class PlaceFormViewModel(
 
     fun onToastShown() { _toastMessage.value = null }
     fun onNavigationDone() { _navigateBack.value = false }
+    fun onErrorMessageShown() { _uiState.update { it.copy(errorMessage = null) } }
 }
