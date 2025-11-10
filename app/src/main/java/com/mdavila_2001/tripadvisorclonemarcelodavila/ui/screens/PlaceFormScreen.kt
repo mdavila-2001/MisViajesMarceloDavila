@@ -185,7 +185,6 @@ fun PlaceFormScreen(
                         label = { Text("Ciudad (Obligatorio)") },
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(150.dp),
                     )
                 }
                 item {
@@ -195,7 +194,6 @@ fun PlaceFormScreen(
                         label = { Text("Descripción") },
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(150.dp),
                     )
                 }
                 item {
