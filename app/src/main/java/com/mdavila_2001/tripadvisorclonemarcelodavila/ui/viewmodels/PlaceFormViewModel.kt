@@ -2,11 +2,13 @@ package com.mdavila_2001.tripadvisorclonemarcelodavila.ui.viewmodels
 
 import android.app.Application
 import android.net.Uri
+import android.net.Uri
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.mdavila_2001.tripadvisorclonemarcelodavila.data.remote.models.dto.PlaceDTO
 import com.mdavila_2001.tripadvisorclonemarcelodavila.data.remote.network.RetroFitInstance
 import com.mdavila_2001.tripadvisorclonemarcelodavila.data.repositories.PlaceRepository
+import com.mdavila_2001.tripadvisorclonemarcelodavila.data.repositories.imgbb.ImageRepository
 import com.mdavila_2001.tripadvisorclonemarcelodavila.data.repositories.imgbb.ImageRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -25,6 +27,8 @@ data class PlaceFormUiState(
 
     val selectedImageUri: Uri? = null,
     val isUploadingImage: Boolean = false,
+    val selectedImageUri: Uri? = null,
+    val isUploadingImage: Boolean = false,
     val isLoading: Boolean = false,
     val errorMessage: String? = null
 )
@@ -35,6 +39,7 @@ class PlaceFormViewModel(
     private val placeId: Int?
 ) : AndroidViewModel(application) {
     private val repository = PlaceRepository(RetroFitInstance.api)
+    private val imageRepository = ImageRepository()
     private val imageRepository = ImageRepository()
 
     private val _uiState = MutableStateFlow(PlaceFormUiState())
@@ -67,6 +72,7 @@ class PlaceFormViewModel(
                                 name = place.name,
                                 city = place.city,
                                 description = place.description ?: "",
+                                imageUrl = place.imageUrl?.replace("\\/", "/") ?: "",
                                 imageUrl = place.imageUrl?.replace("\\/", "/") ?: "",
                                 timeToSpend = place.timeToSpend ?: "",
                                 price = place.price ?: "",
@@ -135,6 +141,10 @@ class PlaceFormViewModel(
             _uiState.update { it.copy(errorMessage = "Espera a que termine de subir la imagen") }
             return
         }
+        if (state.isUploadingImage) {
+            _uiState.update { it.copy(errorMessage = "Espera a que termine de subir la imagen") }
+            return
+        }
 
         _uiState.update { it.copy(isLoading = true) }
 
@@ -174,5 +184,6 @@ class PlaceFormViewModel(
 
     fun onToastShown() { _toastMessage.value = null }
     fun onNavigationDone() { _navigateBack.value = false }
+    fun onErrorMessageShown() { _uiState.update { it.copy(errorMessage = null) } }
     fun onErrorMessageShown() { _uiState.update { it.copy(errorMessage = null) } }
 }
