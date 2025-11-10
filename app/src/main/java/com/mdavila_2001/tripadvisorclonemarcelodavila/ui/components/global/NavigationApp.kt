@@ -8,6 +8,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.mdavila_2001.tripadvisorclonemarcelodavila.ui.NavRoutes
 import com.mdavila_2001.tripadvisorclonemarcelodavila.ui.screens.LoginScreen
+import com.mdavila_2001.tripadvisorclonemarcelodavila.ui.screens.PlaceDetailScreen
 import com.mdavila_2001.tripadvisorclonemarcelodavila.ui.screens.SplashScreen
 import com.mdavila_2001.tripadvisorclonemarcelodavila.ui.screens.TripDetailScreen
 import com.mdavila_2001.tripadvisorclonemarcelodavila.ui.screens.TripFormScreen
@@ -73,6 +74,24 @@ fun NavigationApp() {
                 tripId = tripId,
                 tripName = tripName.replace("_", " "),
                 tripOwner = tripOwner
+            )
+        }
+
+        composable(
+            NavRoutes.PlaceDetail.route,
+            arguments = NavRoutes.PlaceDetail.arguments
+        ) { backStackEntry ->
+
+            val tripId = backStackEntry.arguments?.getInt("tripId")
+            val placeId = backStackEntry.arguments?.getInt("placeId")
+
+            requireNotNull(tripId) { "El ID del viaje es nulo" }
+            requireNotNull(placeId) { "El ID del lugar es nulo" }
+
+            PlaceDetailScreen(
+                navController = navController,
+                tripId = tripId,
+                placeId = placeId
             )
         }
     }

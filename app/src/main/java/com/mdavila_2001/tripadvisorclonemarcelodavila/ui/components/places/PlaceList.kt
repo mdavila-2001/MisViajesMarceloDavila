@@ -1,4 +1,4 @@
-package com.mdavila_2001.tripadvisorclonemarcelodavila.ui.components
+package com.mdavila_2001.tripadvisorclonemarcelodavila.ui.components.places
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -17,7 +17,11 @@ import com.mdavila_2001.tripadvisorclonemarcelodavila.data.remote.models.Place
 @Composable
 fun PlaceList(
     places: List<Place>,
-    modifier: Modifier = Modifier, onPlaceClick: (Place) -> Unit
+    modifier: Modifier = Modifier,
+    onPlaceClick: (Place) -> Unit,
+    isMyTrip: Boolean,
+    onEditClick: (Place) -> Unit,
+    onDeleteClick: (Place) -> Unit
 ) {
     if(places.isEmpty()){
         Box(
@@ -37,7 +41,10 @@ fun PlaceList(
                     place = place,
                     onClick = {
                         onPlaceClick(place)
-                    }
+                    },
+                    isMyTrip = isMyTrip,
+                    onEditClick = { onEditClick(place) },
+                    onDeleteClick = { onDeleteClick(place) }
                 )
             }
         }
@@ -67,5 +74,11 @@ fun PlaceListPreview() {
             updatedAt = "2023-02-02"
         )
     )
-    PlaceList(places = samplePlaces, onPlaceClick = {})
+    PlaceList(
+        places = samplePlaces,
+        onPlaceClick = {},
+        isMyTrip = true,
+        onEditClick = {},
+        onDeleteClick = {}
+    )
 }

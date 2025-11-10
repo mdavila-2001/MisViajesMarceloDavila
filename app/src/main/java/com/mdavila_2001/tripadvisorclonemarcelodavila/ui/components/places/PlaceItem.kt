@@ -1,16 +1,26 @@
-package com.mdavila_2001.tripadvisorclonemarcelodavila.ui.components
+package com.mdavila_2001.tripadvisorclonemarcelodavila.ui.components.places
 
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material3.Card
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
@@ -28,30 +38,64 @@ import com.mdavila_2001.tripadvisorclonemarcelodavila.ui.theme.TripAdvisorCloneM
 @Composable
 fun PlaceItem(
     place: Place,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    isMyTrip: Boolean,
+    onEditClick: () -> Unit,
+    onDeleteClick: () -> Unit
 ) {
-    Row(
-        modifier = Modifier.padding(8.dp),
-        verticalAlignment = Alignment.CenterVertically
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable { onClick() }
     ) {
-        AsyncImage(
-            model = ImageRequest.Builder(LocalContext.current)
-                .data(place.imageUrl)
-                .placeholder(R.drawable.ic_launcher_background)
-                .error(R.drawable.ic_launcher_foreground)
-                .crossfade(true)
-                .build(),
-            contentDescription = place.name,
-            modifier = Modifier.size(80.dp),
-            contentScale = ContentScale.Crop
-        )
-        Spacer(
-            Modifier.width(16.dp)
-        )
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(8.dp)
+                .clickable { onClick() },
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                AsyncImage(
+                    model = ImageRequest.Builder(LocalContext.current)
+                        .data(place.imageUrl)
+                        .placeholder(R.drawable.ic_launcher_background)
+                        .error(R.drawable.ic_launcher_foreground)
+                        .crossfade(true)
+                        .build(),
+                    contentDescription = place.name,
+                    modifier = Modifier.size(80.dp),
+                    contentScale = ContentScale.Crop
+                )
+                Spacer(
+                    Modifier.width(16.dp)
+                )
 
-        Column {
-            Text(text = place.name, fontWeight = FontWeight.Bold, style = MaterialTheme.typography.titleMedium)
-            Text(text = place.city, style = MaterialTheme.typography.bodyMedium)
+                Column {
+                    Text(text = place.name, fontWeight = FontWeight.Bold, style = MaterialTheme.typography.titleMedium)
+                    Text(text = place.city, style = MaterialTheme.typography.bodyMedium)
+                }
+            }
+            if (isMyTrip) {
+                Row {
+                    IconButton(onClick = onEditClick) {
+                        Icon(
+                            Icons.Default.Edit,
+                            contentDescription = "Editar Lugar"
+                        )
+                    }
+                    IconButton(onClick = onDeleteClick) {
+                        Icon(
+                            Icons.Default.Delete,
+                            contentDescription = "Eliminar Lugar",
+                            tint = Color.Red
+                        )
+                    }
+                }
+            }
         }
     }
 }
@@ -73,6 +117,12 @@ fun PlaceItemPreview() {
             createdAt = "2023-01-01",
             updatedAt = "2023-01-02"
         )
-        PlaceItem(place = samplePlace, onClick = {})
+        PlaceItem(
+            place = samplePlace,
+            onClick = {},
+            isMyTrip = true,
+            onEditClick = {},
+            onDeleteClick = {}
+        )
     }
 }

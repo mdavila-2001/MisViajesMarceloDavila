@@ -23,8 +23,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.mdavila_2001.tripadvisorclonemarcelodavila.ui.NavRoutes
 import com.mdavila_2001.tripadvisorclonemarcelodavila.ui.components.global.AppBar
-import com.mdavila_2001.tripadvisorclonemarcelodavila.ui.components.PlaceList
+import com.mdavila_2001.tripadvisorclonemarcelodavila.ui.components.places.PlaceList
 import com.mdavila_2001.tripadvisorclonemarcelodavila.ui.viewmodels.TripDetailViewModel
 
 class TripDetailViewModelFactory(
@@ -104,7 +105,17 @@ fun TripDetailScreen(
                 PlaceList(
                     places = uiState.places,
                     modifier = Modifier,
-                    onPlaceClick = { }
+                    onPlaceClick = { place ->
+                        navController.navigate(
+                            NavRoutes.PlaceDetail.createRoute(
+                                tripId = place.tripId,
+                                place.id
+                            )
+                        )
+                    },
+                    isMyTrip = uiState.isMyTrip,
+                    onEditClick = {},
+                    onDeleteClick = {}
                 )
             }
         }

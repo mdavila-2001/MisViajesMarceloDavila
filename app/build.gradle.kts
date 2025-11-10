@@ -46,6 +46,7 @@ dependencies {
     implementation(libs.retrofit)
     implementation(libs.androidx.navigation.runtime.ktx)
     implementation(libs.androidx.navigation.compose)
+    implementation(libs.androidx.compose.foundation.layout)
     runtimeOnly(libs.androidx.lifecycle.viewmodel.compose)
     runtimeOnly(libs.androidx.lifecycle.runtime)
     runtimeOnly(libs.androidx.navigation.compose)
