@@ -6,7 +6,6 @@ data class ImgBbData(
     @SerializedName("id")
     val id: String,
 
-    // Esta es la URL que queremos
     @SerializedName("display_url")
     val displayUrl: String,
 
