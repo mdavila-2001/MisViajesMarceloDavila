@@ -38,7 +38,6 @@ class TripsViewModel(application: Application): AndroidViewModel(application) {
     private val _navigateToLogin = MutableStateFlow(false)
     val navigateToLogin: StateFlow<Boolean> = _navigateToLogin
 
-    // Evento que indica que un viaje fue eliminado correctamente
     private val _deleteSuccess = MutableSharedFlow<Boolean>(replay = 0)
     val deleteSuccess = _deleteSuccess.asSharedFlow()
 
