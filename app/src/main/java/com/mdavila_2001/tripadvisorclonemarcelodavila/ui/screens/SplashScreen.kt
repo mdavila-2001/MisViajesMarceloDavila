@@ -1,6 +1,5 @@
 package com.mdavila_2001.tripadvisorclonemarcelodavila.ui.screens
 
-import android.window.SplashScreenView
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -58,7 +57,6 @@ private fun SplashView() {
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
-        // Asumiendo que guardaste el logo en 'res/drawable/logo_viajes_app.png'
         Image(
             painter = painterResource(id = R.drawable.splash),
             contentDescription = "Logo de la App",
